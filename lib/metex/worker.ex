@@ -1,10 +1,23 @@
 defmodule Metex.Worker do
   alias Metex.Weather
 
-  def temperature_of(api_key, location) do
+  @api_key Application.get_env(:metex, :weather_api_key)
+
+  def loop() do
+    receive do
+      {sender_pid, location} ->
+        send(sender_pid, {:ok, temperature_of(location)})
+
+      _ ->
+        IO.puts("I don't know how to process this message.")
+    end
+
+    loop()
+  end
+
+  defp temperature_of(location) do
     result =
-      api_key
-      |> Weather.client()
+      Weather.client(@api_key)
       |> Weather.get_weather(location)
       |> parse_response()
 
