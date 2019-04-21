@@ -1,11 +1,13 @@
 defmodule Metex do
   def temperatures_of(cities) do
-    coordinator_pid = spawn(Metex.Coordinator, :loop, [[], Enum.count(cities)])
+    Metex.Worker.start_link()
 
     cities
-    |> Enum.each(fn city ->
-      worker_pid = spawn(Metex.Worker, :loop, [])
-      send(worker_pid, {coordinator_pid, city})
+    |> Task.async_stream(&Metex.Worker.get_temperature/1)
+    |> Enum.map(fn {task, res} ->
+      res || Task.shutdown(task, :brutal_kill)
     end)
+    |> Enum.sort()
+    |> Enum.to_list()
   end
 end
