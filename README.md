@@ -15,16 +15,17 @@
 
 3. Start `iex`:
 
-    ```
-    iex> cities = ["Frankfurt", "Dallas", "Vranje", "Rome", "Tokyo", "Budapest"]
+    ```elixir
+    iex> cities = ["Frankfurt", "Dallas", "Vranje", "Rome", "Tokyo", "Budapest", "Some Fake Place"]
     iex> cities |> Metex.temperatures_of()
     [
-      {"Budapest", 14.8},
-      {"Dallas", 26.7},
-      {"Frankfurt", 16.2},
-      {"Rome", 16.6},
-      {"Tokyo", 15.4},
-      {"Vranje", 10.0}
+      {:ok, "Budapest", 21.5},
+      {:ok, "Dallas", 15.9},
+      {:ok, "Frankfurt", 25.0},
+      {:ok, "Rome", 23.0},
+      {:ok, "Tokyo", 18.4},
+      {:ok, "Vranje", 22.0},
+      {:error, "Some Fake Place", "city not found", "404"}
     ]
     ```
 ## Attribution

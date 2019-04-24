@@ -38,7 +38,7 @@ defmodule Metex do
     {:ok, body["name"], temp}
   end
 
-  defp parse_response(_) do
-    :error
+  defp parse_response({:ok, %Tesla.Env{query: query, body: body}}) do
+    {:error, query[:q], body["message"], body["cod"]}
   end
 end
